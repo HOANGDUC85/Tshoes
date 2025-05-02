@@ -108,8 +108,10 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { useCart } from '~/composables/useCart';
 
 const router = useRouter();
+const { updateCartCount } = useCart();
 const cartItems = ref([]);
 const loading = ref(true);
 const shippingCost = ref(10.00);
@@ -175,6 +177,12 @@ const removeItem = (itemToRemove) => {
     !(item.id === itemToRemove.id && item.selectedSize === itemToRemove.selectedSize)
   );
   saveCartToSession(); // Save changes
+  
+  // Update cart count
+  updateCartCount(cartItems.value.length);
+  
+  // Reload the page to update the status
+  window.location.reload();
 };
 
 // Computed property to check if all items are selected
