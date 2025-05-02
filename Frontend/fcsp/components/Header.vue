@@ -16,9 +16,9 @@
 
       <!-- Navigation -->
       <nav class="navbar-nav" :class="{ 'nav-open': isNavOpen }">
-        <template v-for="item in navItems" :key="item.path">
+        <template v-for="item in navItems" :key="item.path || item.label">
           <router-link 
-            v-if="item.path !== '/customPage'" 
+            v-if="item.path && item.path !== '/customPage'" 
             :to="item.path" 
             class="nav-link"
             @click="toggleNav"
@@ -26,7 +26,7 @@
             <a-icon :type="item.icon" /> {{ item.label }}
           </router-link>
           
-          <div v-else class="custom-dropdown">
+          <div v-else-if="item.path === '/customPage'" class="custom-dropdown">
             <div class="nav-link" style="cursor: pointer;">
               <a-icon :type="item.icon" /> {{ item.label }}
               <DownOutlined style="margin-left: 5px; font-size: 12px;" />
@@ -37,6 +37,24 @@
               </router-link>
               <router-link to="/mycustomPage" class="dropdown-item" @click="toggleNav">
                 <UserOutlined style="margin-right: 8px;" /> My Customize
+              </router-link>
+            </div>
+          </div>
+
+          <div v-else-if="item.subItems" class="custom-dropdown">
+            <div class="nav-link" style="cursor: pointer;">
+              <a-icon :type="item.icon" /> {{ item.label }}
+              <DownOutlined style="margin-left: 5px; font-size: 12px;" />
+            </div>
+            <div class="dropdown-content">
+              <router-link 
+                v-for="subItem in item.subItems" 
+                :key="subItem.path"
+                :to="subItem.path" 
+                class="dropdown-item" 
+                @click="toggleNav"
+              >
+                <a-icon :type="subItem.icon" style="margin-right: 8px;" /> {{ subItem.label }}
               </router-link>
             </div>
           </div>
@@ -123,8 +141,15 @@ const navItems = [
   { path: '/homePage', label: 'Home', icon: 'home' },
   { path: '/productPage', label: 'Products', icon: 'shop' },
   { path: '/customPage', label: 'Customize', icon: 'edit' },
-  { path: '/contactPage', label: 'Contact', icon: 'mail' },
-  { path: '/aboutPage', label: 'About', icon: 'info-circle' },
+  { 
+    label: 'Page', 
+    icon: 'appstore',
+    subItems: [
+      { path: '/contactPage', label: 'Contact', icon: 'mail' },
+      { path: '/aboutPage', label: 'About', icon: 'info-circle' },
+      { path: '/blogPage', label: 'Blog', icon: 'info-circle' }
+    ]
+  }
 ];
 
 // Loại bỏ Customize khỏi danh sách menu thông thường vì đã có dropdown riêng
