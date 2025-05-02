@@ -13,7 +13,7 @@
       
       <!-- Dropdown chọn nhà sản xuất -->
       <div class="manufacturer-selector">
-        <label for="manufacturer">Thương hiệu:</label>
+        <label for="manufacturer">Shop Custom:</label>
         <select id="manufacturer" v-model="selectedManufacturer" @change="handleManufacturerChange">
           <option v-for="(mfr, index) in manufacturers" :key="index" :value="mfr.id">
             {{ mfr.name }}
@@ -455,11 +455,11 @@ watch(showEditNameModal, (newValue) => {
 })
 
 // Danh sách nhà sản xuất với các mức phụ phí khác nhau
-const selectedManufacturer = ref('adidas')
+const selectedManufacturer = ref('Shop Custom 1')
 const manufacturers = reactive([
   {
-    id: 'adidas',
-    name: 'Adidas',
+    id: 'Shop Custom 1',
+    name: 'Shop Custom 1',
     basePrice: 2500000,
     surcharges: {
       colorChange: 30000,     // Phụ phí khi thay đổi màu sắc một thành phần
@@ -480,8 +480,8 @@ const manufacturers = reactive([
     modelPath: '/Adidasrunningshoes.glb'
   },
   {
-    id: 'nike',
-    name: 'Nike',
+    id: 'Shop Custom 2',
+    name: 'Shop Custom 2',
     basePrice: 2800000,
     surcharges: {
       colorChange: 35000,
@@ -501,8 +501,8 @@ const manufacturers = reactive([
     modelPath: '/Adidasrunningshoes.glb' // Thay bằng đường dẫn mô hình Nike thực tế
   },
   {
-    id: 'vans',
-    name: 'Vans',
+    id: 'Shop Custom 3',
+    name: 'Shop Custom 3',
     basePrice: 1800000,
     surcharges: {
       colorChange: 25000,

@@ -1,5 +1,6 @@
 <template>
   <div class="about-wrapper">
+    <div class="big-image-bg"></div>
     <!-- Header Component (Assumed Imported) -->
     <Header/>
 
@@ -15,13 +16,6 @@
 
     <!-- Main Content Section -->
     <section class="container py-6">
-      <!-- Hero Section with Full-Width Background Image -->
-      <div class="hero-section">
-        <div class="hero-content text-center position-relative">
-          <div class="hero-bg-overlay"></div>
-          <h1 class="hero-title">About Us</h1>
-        </div>
-      </div>
 
       <!-- Introduction Section -->
       <div class="row mb-6 intro-section">
@@ -77,10 +71,44 @@
         </div>
       </div>
 
+      <!-- Hero Section with Full-Width Background Image -->
+      <div class="hero-section">
+        <div class="hero-content text-left position-relative">
+          <div class="hero-bg-overlay"></div>
+          <div class="payment-hero-content">
+            <h1 class="payment-hero-title">Get paid faster and more securely with our payment gateway solution.</h1>
+            <p class="payment-hero-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.</p>
+            <NuxtLink to="/contactPage" class="btn btn-primary contact-btn">Contact us</NuxtLink>
+          </div>
+        </div>
+      </div>
+      <!-- Stats Section -->
+      <div class="stats-section">
+        <div class="stat-item">
+          <h3 class="stat-number">2M+</h3>
+          <p class="stat-label">Member Active</p>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <h3 class="stat-number">98%</h3>
+          <p class="stat-label">Satified Customer</p>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <h3 class="stat-number">4.7</h3>
+          <p class="stat-label">User Rating</p>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <h3 class="stat-number">15+</h3>
+          <p class="stat-label">Years of Experience</p>
+        </div>
+      </div>
+
       <!-- Team Members Section -->
       <div class="row mb-6 team-section">
         <div class="col-12 text-center">
-          <h2 class="section-title">Meet Our Craftsmanship Team</h2>
+          <h2 class="section-title">Teamwork makes the dream work.</h2>
           <p class="section-subtitle">
             Discover the skilled artisans and innovators bringing your custom shoe designs to life with precision and creativity.
           </p>
@@ -93,55 +121,55 @@
                 alt="Ba Tung, FE & Leader"
                 class="team-photo"
               />
-              <h4>Ba Tung</h4>
-              <p class="team-role">FE & Leader</p>
+              <h4>Bá Tùng</h4>
               <div class="social-icons">
                 <a href="#" class="social-icon" aria-label="Ba Tung's LinkedIn"><i class="fab fa-linkedin"></i></a>
                 <a href="#" class="social-icon" aria-label="Ba Tung's Twitter"><i class="fab fa-twitter"></i></a>
                 <a href="#" class="social-icon" aria-label="Ba Tung's Instagram"><i class="fab fa-instagram"></i></a>
               </div>
+              <p class="team-role">FE & Leader</p>
             </div>
             <div class="team-card">
               <img
-                src="https://via.placeholder.com/200x200?text=Harry+Worth"
+                src="https://th.bing.com/th/id/OIP.8zxb_q87POL2XN03FhvQ1gHaHa?w=187&h=187&c=7&r=0&o=5&dpr=1.3&pid=1.7"
                 alt="Harry Worth, Branch Manager"
                 class="team-photo"
               />
-              <h4>Harry Worth</h4>
-              <p class="team-role">Branch Manager</p>
+              <h4>Triệu Ân</h4>
               <div class="social-icons">
                 <a href="#" class="social-icon" aria-label="Harry Worth's LinkedIn"><i class="fab fa-linkedin"></i></a>
                 <a href="#" class="social-icon" aria-label="Harry Worth's Twitter"><i class="fab fa-twitter"></i></a>
                 <a href="#" class="social-icon" aria-label="Harry Worth's Instagram"><i class="fab fa-instagram"></i></a>
               </div>
+              <p class="team-role">BE & Database</p>
             </div>
             <div class="team-card">
               <img
-                src="https://via.placeholder.com/200x200?text=Jenny+Hobb"
+                src="https://th.bing.com/th/id/OIP.8zxb_q87POL2XN03FhvQ1gHaHa?w=187&h=187&c=7&r=0&o=5&dpr=1.3&pid=1.7"
                 alt="Jenny Hobb, Head Manager"
                 class="team-photo"
               />
-              <h4>Jenny Hobb</h4>
-              <p class="team-role">Head Manager</p>
+              <h4>Hoàng Đức</h4>
               <div class="social-icons">
                 <a href="#" class="social-icon" aria-label="Jenny Hobb's LinkedIn"><i class="fab fa-linkedin"></i></a>
                 <a href="#" class="social-icon" aria-label="Jenny Hobb's Twitter"><i class="fab fa-twitter"></i></a>
                 <a href="#" class="social-icon" aria-label="Jenny Hobb's Instagram"><i class="fab fa-instagram"></i></a>
               </div>
+              <p class="team-role">FE & Docs</p>
             </div>
             <div class="team-card">
               <img
-                src="https://via.placeholder.com/200x200?text=Johnny+Smith"
+                src="https://th.bing.com/th/id/OIP.8zxb_q87POL2XN03FhvQ1gHaHa?w=187&h=187&c=7&r=0&o=5&dpr=1.3&pid=1.7"
                 alt="Johnny Smith, Senior Supervisor"
                 class="team-photo"
               />
-              <h4>Johnny Smith</h4>
-              <p class="team-role">Senior Supervisor</p>
+              <h4>Triệu Thuận</h4>
               <div class="social-icons">
                 <a href="#" class="social-icon" aria-label="Johnny Smith's LinkedIn"><i class="fab fa-linkedin"></i></a>
                 <a href="#" class="social-icon" aria-label="Johnny Smith's Twitter"><i class="fab fa-twitter"></i></a>
                 <a href="#" class="social-icon" aria-label="Johnny Smith's Instagram"><i class="fab fa-instagram"></i></a>
               </div>
+              <p class="team-role">BE & 3D Model</p>
             </div>
           </div>
         </div>
@@ -161,8 +189,6 @@
 <script setup>
 import Header from '~/components/Header.vue';
 
-
-
 // Dynamic year for footer
 const currentYear = new Date().getFullYear();
 </script>
@@ -178,6 +204,8 @@ const currentYear = new Date().getFullYear();
   min-height: 100vh;
   font-family: 'Poppins', sans-serif;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .container {
@@ -186,6 +214,9 @@ const currentYear = new Date().getFullYear();
   color: #1e293b;
   max-width: 1300px;
   margin: 0 auto;
+  flex: 1;
+  padding-bottom: 60px;
+  min-height: 400px;
 }
 
 /* Breadcrumb Styles */
@@ -214,21 +245,31 @@ const currentYear = new Date().getFullYear();
 /* Hero Section with Full-Width Background Image */
 .hero-section {
   position: relative;
-  margin-bottom: 60px;
-  width: 100vw;
-  max-width: 1300px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.hero-content {
-  position: relative;
+  width: 100%;
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://kingshoes.vn/data/upload/media/af1-2.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 90vh;
+  min-height: 600px;
+  max-height: 900px;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  animation: fadeIn 1.5s ease-in-out;
+}
+
+.hero-content {
   max-width: 1300px;
+  width: 100%;
   margin: 0 auto;
+  padding: 0 20px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  z-index: 2;
 }
 
 .hero-bg-overlay {
@@ -243,29 +284,59 @@ const currentYear = new Date().getFullYear();
   border-radius: 0;
 }
 
-.hero-title {
-  font-size: 4.5rem;
-  font-weight: 700;
-  color: #fff;
-  text-transform: uppercase;
+.payment-hero-content {
+  max-width: 800px;
+  color: white;
   position: relative;
-  z-index: 1;
-  padding: 20px;
-  text-shadow: 3px 3px 15px rgba(0, 0, 0, 0.5);
-  border-radius: 8px;
-  background: linear-gradient(45deg, #2c3e50, #3498db);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent; 
+  z-index: 2;
+  text-align: left;
+  padding-left: 20px;
+}
+
+.payment-hero-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+  text-align: left;
+}
+
+.payment-hero-text {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  text-align: left;
+}
+
+.contact-btn {
+  padding: 12px 30px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+  display: inline-block;
+  margin: 0;
+}
+
+.contact-btn:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
 }
 
 /* Introduction Section */
 .intro-section {
   padding: 60px 0;
   background: #ffffff;
-  border-radius: 15px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   margin-bottom: 60px;
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
 }
 
 .intro-content {
@@ -334,7 +405,8 @@ const currentYear = new Date().getFullYear();
 
 /* Image Gallery Section */
 .image-gallery {
-  padding: 60px 0;
+  padding: 80px 0;
+  min-height: 500px;
 }
 
 .gallery-text {
@@ -359,11 +431,12 @@ const currentYear = new Date().getFullYear();
 
 .gallery-video {
   position: relative;
-  padding-bottom: 56.25%; /* Tỷ lệ 16:9 */
+  padding-bottom: 56.25%;
   height: 0;
   overflow: hidden;
   border-radius: 10px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  min-height: 400px;
 }
 
 .gallery-iframe {
@@ -377,15 +450,13 @@ const currentYear = new Date().getFullYear();
 
 /* Team Members Section */
 .team-section {
-  padding: 60px 0;
-  background: #ffffff;
-  border-radius: 15px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  padding: 80px 0;
+  margin-top: 40px;
+  min-height: 600px;
 }
 
 .section-title {
   font-size: 2.5rem;
-  font-weight: 600;
   background: linear-gradient(45deg, #2c3e50, #3498db);
   -webkit-background-clip: text;
   background-clip: text;
@@ -421,11 +492,11 @@ const currentYear = new Date().getFullYear();
 }
 
 .team-photo {
-  width: 200px;
-  height: 200px;
+  width: 220px;
+  height: 220px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   border: 4px solid transparent;
   background-clip: border-box;
 }
@@ -465,17 +536,44 @@ const currentYear = new Date().getFullYear();
 /* Footer Note */
 .footer-note {
   border-top: 1px solid #e2e8f0;
+  margin-top: auto;
+  padding: 20px 0;
+  background: white;
 }
 
 .footer-note p {
   font-size: 0.9rem;
   color: #64748b;
+  margin: 0;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .hero-title {
-    font-size: 2.5rem;
+  .hero-section {
+    height: 60vh;
+    min-height: 400px;
+  }
+
+  .payment-hero-title {
+    font-size: 2rem;
+  }
+
+  .stats-section {
+    flex-wrap: wrap;
+    padding: 1rem 0;
+  }
+
+  .stat-item {
+    width: 50%;
+    padding: 1rem 0;
+  }
+
+  .stat-divider {
+    display: none;
+  }
+
+  .stat-number {
+    font-size: 2rem;
   }
 
   .intro-title {
@@ -515,5 +613,53 @@ const currentYear = new Date().getFullYear();
     max-width: 300px;
     margin-bottom: 20px;
   }
+}
+
+/* Stats Section */
+.stats-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 0;
+  background: white;
+  width: 100%;
+  border-bottom: 1px solid #eee;
+}
+
+.stat-item {
+  text-align: center;
+  flex: 1;
+}
+
+.stat-divider {
+  width: 1px;
+  height: 50px;
+  background-color: #e0e0e0;
+  margin: 0 15px;
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #007bff;
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  font-size: 1rem;
+  color: #666;
+  margin: 0;
+}
+
+.big-image-bg {
+  width: 100vw;
+  height: 550px;
+  min-height: 250px;
+  max-height: 500px;
+  background: url('https://kingshoes.vn/data/upload/media/af1-2.jpg') center center/cover no-repeat;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
 }
 </style>
