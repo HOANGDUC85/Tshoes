@@ -25,6 +25,7 @@
               <div class="cart-item-details">
                 <h4>{{ item.name }}</h4>
                 <p class="price">{{ formatPrice(item.price) }}</p>
+                <p class="price">Size: {{ item.size }}</p>
                 <p v-if="item.surcharge && item.surcharge > 0" class="price surcharge">Phụ phí: {{ formatPrice(item.surcharge) }}</p>
                 <p v-if="item.surcharge && item.surcharge > 0" class="price total">Tổng: {{ formatPrice(item.price + item.surcharge) }}</p>
                 
@@ -212,10 +213,10 @@ const editDesign = (item) => {
 
 // Định dạng giá tiền VND
 const formatPrice = (price) => {
-  return new Intl.NumberFormat('vi-VN', {
+  return new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'VND'
-  }).format(price);
+    currency: 'USD'
+  }).format((price || 0) / 25000); // Chuyển đổi từ VND sang USD với tỷ giá 1 USD = 25,000 VND
 };
 
 // Định dạng ngày giờ
@@ -373,6 +374,7 @@ const addToProduct = (item) => {
     name: item.name,
     price: item.price,
     surcharge: item.surcharge,
+    size: item.size,
     image: item.image,
     description: `Thiết kế tùy chỉnh từ ${item.name}`,
     designData: JSON.parse(JSON.stringify(item.designData || {})),
@@ -394,6 +396,8 @@ const saveToProduct = () => {
     const optimizedProduct = {
       name: selectedProduct.value.name,
       price: selectedProduct.value.price,
+      surcharge: selectedProduct.value.surcharge,
+      size: selectedProduct.value.size,
       image: selectedProduct.value.image,
       description: selectedProduct.value.description || '',
       designData: {
@@ -437,6 +441,8 @@ const saveToProduct = () => {
         const singleProduct = [{
           name: selectedProduct.value.name,
           price: selectedProduct.value.price,
+          surcharge: selectedProduct.value.surcharge,
+          size: selectedProduct.value.size,
           image: selectedProduct.value.image,
           description: selectedProduct.value.description || '',
           id: Date.now()

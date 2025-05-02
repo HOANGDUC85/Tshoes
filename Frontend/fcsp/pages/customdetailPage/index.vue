@@ -8,7 +8,7 @@
           <i class="fas fa-edit"></i> Sửa tên
         </button>
       </div>
-      <p class="product-price">{{ formatPrice(2500000) }}</p>
+      <p class="product-price">{{ formatPrice(149.99) }}</p>
       <p class="product-surcharge" v-if="surcharge > 0">Phụ phí: {{ formatPrice(surcharge) }}</p>
       
       <!-- Dropdown chọn nhà sản xuất -->
@@ -123,9 +123,29 @@
             <h4>Chi tiết sản phẩm</h4>
             <div class="summary-info">
               <p><strong>Tên sản phẩm:</strong> {{ customProductName || 'Custom Running Shoes' }}</p>
-              <p><strong>Giá gốc:</strong> {{ formatPrice(2500000) }}</p>
+              <p><strong>Giá gốc:</strong> {{ formatPrice(149.99) }}</p>
               <p v-if="surcharge > 0"><strong>Phụ phí tùy chỉnh:</strong> {{ formatPrice(surcharge) }}</p>
-              <p><strong>Tổng tiền:</strong> {{ formatPrice(2500000 + surcharge) }}</p>
+              <p><strong>Tổng tiền:</strong> {{ formatPrice(149.99 + surcharge) }}</p>
+              <p><strong>Size:</strong>
+                <select v-model="selectedSize" class="size-select">
+                  <option v-for="size in sizes" :key="size" :value="size">
+                    {{ size }}
+                  </option>
+                </select>
+              </p>
+              <p><strong>Số lượng:</strong>
+                <div class="quantity-input">
+                  <button class="quantity-btn" @click="decreaseQuantity">-</button>
+                  <input 
+                    type="number" 
+                    v-model="selectedQuantity"
+                    @input="updateQuantity($event)"
+                    min="1"
+                    class="quantity-value"
+                  >
+                  <button class="quantity-btn" @click="increaseQuantity">+</button>
+                </div>
+              </p>
             </div>
           </div>
           
@@ -427,6 +447,11 @@ const showEditNameModal = ref(false)
 const selectedAngleIndex = ref(0)
 const customProductName = ref('')
 
+// Size selection
+const selectedSize = ref('38') // Giá trị mặc định
+const sizes = ref(['38', '39', '40', '41', '42', '43', '44', '45'])
+const selectedQuantity = ref(1) // Thêm state cho quantity
+
 // Mở modal sửa tên sản phẩm
 const openEditNameModal = () => {
   if (!customProductName.value) {
@@ -460,10 +485,10 @@ const manufacturers = reactive([
   {
     id: 'Shop Custom 1',
     name: 'Shop Custom 1',
-    basePrice: 2500000,
+    basePrice: 149.99,
     surcharges: {
-      colorChange: 30000,     // Phụ phí khi thay đổi màu sắc một thành phần
-      imageApplication: 50000, // Phụ phí khi áp dụng hình ảnh lên một thành phần
+      colorChange: 2, // Phụ phí khi thay đổi màu sắc một thành phần
+      imageApplication: 3, // Phụ phí khi áp dụng hình ảnh lên một thành phần
       componentRates: {
         // Hệ số nhân phụ phí cho từng thành phần
         Base: 1.0,
@@ -482,10 +507,10 @@ const manufacturers = reactive([
   {
     id: 'Shop Custom 2',
     name: 'Shop Custom 2',
-    basePrice: 2800000,
+    basePrice: 169.99,
     surcharges: {
-      colorChange: 35000,
-      imageApplication: 60000,
+      colorChange: 2.5,
+      imageApplication: 3.5,
       componentRates: {
         Base: 1.2,
         Heel: 1.5,
@@ -503,10 +528,10 @@ const manufacturers = reactive([
   {
     id: 'Shop Custom 3',
     name: 'Shop Custom 3',
-    basePrice: 1800000,
+    basePrice: 129.99,
     surcharges: {
-      colorChange: 25000,
-      imageApplication: 40000,
+      colorChange: 1.5,
+      imageApplication: 2.5,
       componentRates: {
         Base: 0.9,
         Heel: 1.0,
@@ -1017,12 +1042,16 @@ const addToCart = () => {
   
   calculateSurcharge()
   
+  const totalPrice = 149.99 + surcharge.value // Giá cố định USD + phụ phí USD
+  
   const productData = {
     id: isEditing && editId ? parseInt(editId) : Date.now(),
     name: customProductName.value || 'Custom Running Shoes',
     manufacturerId: selectedManufacturer.value,
-    price: 2500000, // Giá cố định
+    price: totalPrice, // Giá USD
     surcharge: surcharge.value,
+    selectedSize: selectedSize.value,
+    selectedQuantity: selectedQuantity.value,
     image: captureAngles[1].preview,
     designData: {
       colors: {},
@@ -1036,35 +1065,12 @@ const addToCart = () => {
     previewImages: captureAngles.map(angle => angle.preview)
   }
   
-  for (const comp of components) {
-    const partName = comp.value
-    const partsToSave = partGroups[partName] || [partName]
-    partsToSave.forEach((subPart) => {
-      if (materials[subPart]) {
-        const hexColor = '#' + materials[subPart].color.getHexString()
-        productData.designData.colors[subPart] = hexColor
-        
-        if (customTextures[subPart]) {
-          const textureType = customTextures[subPart].texture instanceof THREE.CanvasTexture ? 'text' : 'image'
-          productData.designData.textures[subPart] = {
-            type: textureType,
-            textContent: customText.value
-          }
-          if (textureType === 'image' && customTextures[subPart].imageData) {
-            productData.designData.imagesData[subPart] = customTextures[subPart].imageData
-          }
-        }
-      }
-    })
-  }
-  
   let cart = []
-  const savedCart = localStorage.getItem('cart')
+  const savedCart = sessionStorage.getItem('cart')
   if (savedCart) {
     cart = JSON.parse(savedCart)
   }
   
-  const totalPrice = 2500000 + surcharge.value // Giá cố định + phụ phí
   const formattedTotalPrice = formatPrice(totalPrice)
   const formattedSurcharge = surcharge.value > 0 ? `\nPhụ phí tùy chỉnh: ${formatPrice(surcharge.value)}` : ''
   
@@ -1072,17 +1078,18 @@ const addToCart = () => {
     const itemIndex = cart.findIndex(item => item.id === parseInt(editId))
     if (itemIndex !== -1) {
       cart[itemIndex] = productData
+      alert(`Đã cập nhật thiết kế của sản phẩm trong giỏ hàng!\nGiá gốc: ${formatPrice(149.99)}${formattedSurcharge}\nTổng tiền: ${formattedTotalPrice}\nSize: ${selectedSize.value}`)
     } else {
       cart.push(productData)
+      alert(`Sản phẩm thiết kế đã được thêm vào giỏ hàng thành công!\nGiá gốc: ${formatPrice(149.99)}${formattedSurcharge}\nTổng tiền: ${formattedTotalPrice}\nSize: ${selectedSize.value}`)
     }
-    alert(`Đã cập nhật thiết kế của sản phẩm trong giỏ hàng!\nGiá gốc: ${formatPrice(2500000)}${formattedSurcharge}\nTổng tiền: ${formattedTotalPrice}`)
   } else {
     cart.push(productData)
-    alert(`Sản phẩm thiết kế đã được thêm vào giỏ hàng thành công!\nGiá gốc: ${formatPrice(2500000)}${formattedSurcharge}\nTổng tiền: ${formattedTotalPrice}`)
+    alert(`Sản phẩm thiết kế đã được thêm vào giỏ hàng thành công!\nGiá gốc: ${formatPrice(149.99)}${formattedSurcharge}\nTổng tiền: ${formattedTotalPrice}\nSize: ${selectedSize.value}`)
   }
   
-  localStorage.setItem('cart', JSON.stringify(cart))
-  window.location.href = '/cartcustomPage'
+  sessionStorage.setItem('cart', JSON.stringify(cart))
+  window.location.href = '/shoppingCartPage'
 }
 
 const saveAsDraft = () => {
@@ -1093,8 +1100,9 @@ const saveAsDraft = () => {
     id: Date.now(),
     name: customProductName.value || 'Custom Running Shoes (Nháp)',
     manufacturerId: selectedManufacturer.value,
-    price: 2500000, // Giá cố định
+    price: 149.99, // Giá cố định USD
     surcharge: surcharge.value,
+    size: selectedSize.value,
     image: captureAngles[1].preview,
     designData: {
       colors: {},
@@ -1138,11 +1146,11 @@ const saveAsDraft = () => {
   drafts.push(productData)
   localStorage.setItem('designDrafts', JSON.stringify(drafts))
   
-  const totalPrice = 2500000 + surcharge.value // Giá cố định + phụ phí
+  const totalPrice = 149.99 + surcharge.value // Giá cố định USD + phụ phí USD
   const formattedTotalPrice = formatPrice(totalPrice)
   const formattedSurcharge = surcharge.value > 0 ? `\nPhụ phí tùy chỉnh: ${formatPrice(surcharge.value)}` : ''
   
-  alert(`Thiết kế đã được lưu vào bản nháp!\nGiá gốc: ${formatPrice(2500000)}${formattedSurcharge}\nTổng tiền: ${formattedTotalPrice}`)
+  alert(`Thiết kế đã được lưu vào bản nháp!\nGiá gốc: ${formatPrice(149.99)}${formattedSurcharge}\nTổng tiền: ${formattedTotalPrice}\nSize: ${selectedSize.value}`)
   window.location.href = '/mycustomPage'
 }
 
@@ -1672,10 +1680,10 @@ onBeforeUnmount(() => {
 })
 
 const formatPrice = (price) => {
-  return new Intl.NumberFormat('vi-VN', {
+  return new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'VND'
-  }).format(price || 0);
+    currency: 'USD'
+  }).format(price); // Giá trực tiếp bằng USD
 };
 
 const calculateSurcharge = () => {
@@ -1817,6 +1825,26 @@ const showNextImage = () => {
     selectedImage.value = nextImage.file;
     selectedImageName.value = nextImage.name;
     previewImageUrl.value = nextImage.imageUrl;
+  }
+}
+
+// Hàm tăng/giảm số lượng
+const increaseQuantity = () => {
+  selectedQuantity.value++
+}
+
+const decreaseQuantity = () => {
+  if (selectedQuantity.value > 1) {
+    selectedQuantity.value--
+  }
+}
+
+const updateQuantity = (event) => {
+  const value = parseInt(event.target.value)
+  if (!isNaN(value) && value >= 1) {
+    selectedQuantity.value = value
+  } else {
+    selectedQuantity.value = 1
   }
 }
 </script>
@@ -3497,5 +3525,110 @@ const showNextImage = () => {
   padding: 2px 8px;
   border-radius: 10px;
   font-size: 12px;
+}
+
+/* Size selector */
+.size-selector {
+  margin-top: 15px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 250px;
+}
+
+.size-selector label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+  white-space: nowrap;
+}
+
+.size-selector select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: white;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+  padding-right: 30px;
+  flex: 1;
+}
+
+.size-selector select:hover {
+  border-color: #aaa;
+}
+
+.size-selector select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0,123,255,0.15);
+}
+
+.product-summary .summary-info p {
+  margin-bottom: 10px;
+}
+
+.size-select {
+  margin-left: 10px;
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.size-select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0,123,255,0.1);
+}
+
+.quantity-input {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.quantity-btn {
+  background: #f8f9fa;
+  border: none;
+  padding: 5px 12px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #333;
+  transition: all 0.2s;
+}
+
+.quantity-btn:hover {
+  background: #e9ecef;
+}
+
+.quantity-value {
+  width: 50px;
+  text-align: center;
+  border: none;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  padding: 5px;
+  -moz-appearance: textfield;
+}
+
+.quantity-value::-webkit-outer-spin-button,
+.quantity-value::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 </style>

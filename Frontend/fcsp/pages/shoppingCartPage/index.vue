@@ -63,7 +63,7 @@
                   </div>
                 </td>
                  <td>
-                  <span class="fw-bold">${{ (item.price * item.selectedQuantity).toFixed(2) }}</span>
+                  <span class="fw-bold">{{ formatPrice(item.price * item.selectedQuantity) }}</span>
                 </td>
                 <td>
                   <button class="btn btn-sm btn-outline-danger" @click="removeItem(item)">
@@ -118,6 +118,14 @@ const shippingCost = ref(10.00);
 
 // Use a Set to store unique IDs of selected items (e.g., 'id-size')
 const selectedItems = ref(new Set());
+
+// Hàm format giá từ VND sang USD
+const formatPrice = (price) => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD'
+  }).format(price); // Không cần chuyển đổi từ VND sang USD nữa vì giá đã là USD
+};
 
 // Fetch cart items from sessionStorage
 onMounted(() => {
