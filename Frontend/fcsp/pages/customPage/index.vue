@@ -2,16 +2,6 @@
   <div class="product-wrapper">
     <Header />
 
-    <!-- Breadcrumb -->
-    <nav class="container py-3" aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <NuxtLink to="/homePage" class="text-decoration-none">Home</NuxtLink>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">Products</li>
-      </ol>
-    </nav>
-
     <!-- Main Content Section -->
     <main class="container my-5">
       <!-- Filters and Sort -->
@@ -172,32 +162,9 @@ const formatPrice = (price) =>
   position: relative;
 }
 
-/* Breadcrumb Styles */
-.breadcrumb {
-  background: transparent;
-  padding: 0;
-  margin-bottom: 0;
-}
-
-.breadcrumb-item a {
-  color: #3498db; /* Thay từ #8bc34a */
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.breadcrumb-item a:hover {
-  color: #2c3e50; /* Thay từ #7cb342 */
-  text-decoration: underline;
-}
-
-.breadcrumb-item.active {
-  color: #1e293b; /* Đồng bộ với About Page */
-  font-weight: 500;
-}
-
 /* Các style hiện có chỉnh sửa màu */
 .text-sneaker-blue {
-  color: #3498db; /* Thay từ #8bc34a */
+  color: #3498db;
   height: auto;
 }
 
@@ -226,7 +193,7 @@ const formatPrice = (price) =>
   position: absolute;
   top: 10px;
   right: 10px;
-  background: linear-gradient(45deg, #2c3e50, #3498db); /* Thay từ #8bc34a */
+  background: linear-gradient(45deg, #2c3e50, #3498db);
   color: #fff;
   padding: 5px 10px;
   border-radius: 20px;
@@ -238,7 +205,7 @@ const formatPrice = (price) =>
   display: inline-block;
   text-align: center;
   text-decoration: none;
-  background: linear-gradient(45deg, #2c3e50, #3498db); /* Thay từ #8bc34a */
+  background: linear-gradient(45deg, #2c3e50, #3498db);
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -249,7 +216,7 @@ const formatPrice = (price) =>
 }
 
 .btn-sneaker:hover {
-  background: linear-gradient(45deg, #2c3e50 20%, #2980b9); /* Tối hơn một chút từ #3498db */
+  background: linear-gradient(45deg, #2c3e50 20%, #2980b9);
   transform: scale(1.05);
 }
 
@@ -259,20 +226,20 @@ const formatPrice = (price) =>
 
 /* Pagination */
 .pagination .page-link {
-  color: #3498db; /* Thay từ #8bc34a */
+  color: #3498db;
   border: none;
   padding: 10px 15px;
   transition: background 0.3s ease, color 0.3s ease;
 }
 
 .pagination .page-item.active .page-link {
-  background: linear-gradient(45deg, #2c3e50, #3498db); /* Thay từ #8bc34a */
+  background: linear-gradient(45deg, #2c3e50, #3498db);
   color: #fff;
   border-radius: 5px;
 }
 
 .pagination .page-link:hover {
-  background: linear-gradient(45deg, #2c3e50, #3498db); /* Thay từ #8bc34a */
+  background: linear-gradient(45deg, #2c3e50, #3498db);
   color: #fff;
 }
 
@@ -290,7 +257,7 @@ const formatPrice = (price) =>
 
 .filters {
   font-weight: 600;
-  color: #1e293b; /* Đồng bộ với About Page */
+  color: #1e293b;
   cursor: pointer;
 }
 
@@ -309,8 +276,8 @@ const formatPrice = (price) =>
 
 .sort-select:focus {
   outline: none;
-  border-color: #3498db; /* Thay từ #007bff */
-  box-shadow: 0 0 5px rgba(52, 152, 219, 0.3); /* Thay từ rgba(0, 123, 255, 0.3) */
+  border-color: #3498db;
+  box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
 }
 
 /* Responsive adjustments */

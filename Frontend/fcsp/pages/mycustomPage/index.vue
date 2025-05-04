@@ -24,10 +24,10 @@
               
               <div class="cart-item-details">
                 <h4>{{ item.name }}</h4>
-                <p class="price">{{ formatPrice(item.price) }}</p>
+                <p class="price">Giá gốc: {{ formatPrice(BASE_PRICE) }}</p>
                 <p class="price">Size: {{ item.size }}</p>
                 <p v-if="item.surcharge && item.surcharge > 0" class="price surcharge">Phụ phí: {{ formatPrice(item.surcharge) }}</p>
-                <p v-if="item.surcharge && item.surcharge > 0" class="price total">Tổng: {{ formatPrice(item.price + item.surcharge) }}</p>
+                <p class="price total">Tổng: {{ formatPrice(BASE_PRICE + (item.surcharge || DEFAULT_SURCHARGE)) }}</p>
                 
                 <!-- Hiển thị thông tin thiết kế nếu có -->
                 <div v-if="item.designData" class="design-info">
@@ -135,6 +135,11 @@ import { ref, computed, onMounted, watch } from 'vue';
 import Header from '~/components/Header.vue';
 import Footer from '~/components/Footer.vue';
 
+// Các hằng số cho giá và tỷ giá
+const BASE_PRICE = 149.99; // Giá cơ bản
+const EXCHANGE_RATE = 25000; // Tỷ giá VND/USD
+const DEFAULT_SURCHARGE = 0; // Phụ phí mặc định
+
 // Hàm giới hạn kích thước dữ liệu của giỏ hàng
 const limitCartSize = (cartData) => {
   // Tạo bản sao để không ảnh hưởng đến dữ liệu gốc
@@ -211,12 +216,17 @@ const editDesign = (item) => {
   window.location.href = '/customdetailPage?edit=true&id=' + item.id;
 };
 
-// Định dạng giá tiền VND
+// Định dạng giá tiền USD
 const formatPrice = (price) => {
+  if (typeof price !== 'number' || isNaN(price)) {
+    console.warn('Giá không hợp lệ:', price);
+    return '$0.00';
+  }
+  
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD'
-  }).format((price || 0) / 25000); // Chuyển đổi từ VND sang USD với tỷ giá 1 USD = 25,000 VND
+  }).format(price);
 };
 
 // Định dạng ngày giờ
@@ -372,8 +382,8 @@ const addToProduct = (item) => {
   // Chuẩn bị sản phẩm để hiển thị trong modal
   selectedProduct.value = {
     name: item.name,
-    price: item.price,
-    surcharge: item.surcharge,
+    price: item.price || BASE_PRICE,
+    surcharge: item.surcharge || DEFAULT_SURCHARGE,
     size: item.size,
     image: item.image,
     description: `Thiết kế tùy chỉnh từ ${item.name}`,

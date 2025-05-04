@@ -2,16 +2,6 @@
   <div class="product-wrapper">
     <Header />
 
-    <!-- Breadcrumb -->
-    <nav class="container py-3" aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <NuxtLink to="/homePage" class="text-decoration-none">Trang chủ</NuxtLink>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">Sản phẩm</li>
-      </ol>
-    </nav>
-
     <!-- Main Content Section -->
     <section class="container my-5">
       <div class="row g-5">
@@ -277,29 +267,6 @@ onMounted(async () => {
   min-height: 100vh;
   font-family: 'Poppins', sans-serif;
   position: relative;
-}
-
-/* Breadcrumb Styles */
-.breadcrumb {
-  background: transparent;
-  padding: 0;
-  margin-bottom: 0;
-}
-
-.breadcrumb-item a {
-  color: #3498db;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.breadcrumb-item a:hover {
-  color: #2c3e50;
-  text-decoration: underline;
-}
-
-.breadcrumb-item.active {
-  color: #1e293b;
-  font-weight: 500;
 }
 
 /* Card Styles */

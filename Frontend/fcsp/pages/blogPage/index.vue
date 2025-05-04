@@ -3,16 +3,6 @@
     <div class="big-image-bg"></div>
     <Header />
 
-    <!-- Breadcrumb -->
-    <nav class="container py-3" aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <NuxtLink to="/homePage" class="text-decoration-none">Home</NuxtLink>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">Blog</li>
-      </ol>
-    </nav>
-
     <section class="container py-6">
       <!-- Introduction Section -->
       <div class="row mb-6 intro-section">
