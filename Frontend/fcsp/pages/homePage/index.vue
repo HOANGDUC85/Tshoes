@@ -113,9 +113,13 @@
             </div>
             <h5 class="design-title">{{ item.title }}</h5>
             <p class="design-desc">{{ item.desc }}</p>
-            <NuxtLink :to="item.link" class="design-readmore">Read More...</NuxtLink>
           </div>
         </div>
+      </div>
+      <div class="text-center mt-4">
+        <NuxtLink to="/blogPage" class="btn btn-sneaker px-5 py-3 fw-bold text-uppercase">
+          View All Blogs
+        </NuxtLink>
       </div>
     </section>
 
@@ -180,85 +184,19 @@
       </div>
     </section>
 
-    <!-- Blog Teaser Section -->
-    <section class="blog-teaser-section container py-5">
+    <!-- Readmore Section -->
+    <section class="readmore-section container py-5">
       <h2 class="text-center fw-bold mb-5 text-sneaker-orange">Sneaker Stories</h2>
       <div class="row g-4">
-        <div class="col-md-6">
-          <div class="blog-card d-flex">
-            <img src="https://th.bing.com/th/id/OIP.EL5hPJ7k0B7W_D7EbZoexgHaEd?w=363&h=182&c=7&r=0&o=5&dpr=1.3&pid=1.7" alt="Blog Post 1" class="img-fluid rounded" style="max-width: 200px;" />
+        <div class="col-md-6" v-for="article in readmoreArticles" :key="article.id">
+          <div class="readmore-card d-flex">
+            <img :src="article.image" :alt="article.title" class="img-fluid rounded" style="max-width: 200px;" />
             <div class="ms-3">
-              <h5 class="fw-bold">Custom Shoes: Company Swag That Gets People Talking</h5>
-              <p class="text-muted">Your browser does not support our video. When it comes to company swag, businesses are always on the lookout for something unique, memorable, and practical. Custom shoes have emerged as a stan...</p>
-              <NuxtLink to="/blog/custom-shoes-swag" class="text-sneaker-orange">Read More</NuxtLink>
+              <h5 class="fw-bold">{{ article.title }}</h5>
+              <p class="text-muted">{{ article.excerpt }}</p>
             </div>
           </div>
         </div>
-        <div class="col-md-6">
-          <div class="blog-card d-flex">
-            <img src="https://th.bing.com/th/id/OIP.EL5hPJ7k0B7W_D7EbZoexgHaEd?w=363&h=182&c=7&r=0&o=5&dpr=1.3&pid=1.7" alt="Blog Post 2" class="img-fluid rounded" style="max-width: 200px;" />
-            <div class="ms-3">
-              <h5 class="fw-bold">Best Company Branded Shoes in 2025</h5>
-              <p class="text-muted">As we step into 2025, branded shoes continue to dominate the market with their innovation, style, and functionality. The footwear industry has expanded its offerings, introducing products that cate...</p>
-              <NuxtLink to="/blog/best-branded-shoes-2025" class="text-sneaker-orange">Read More</NuxtLink>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="blog-card d-flex">
-            <img src="https://th.bing.com/th/id/OIP.EL5hPJ7k0B7W_D7EbZoexgHaEd?w=363&h=182&c=7&r=0&o=5&dpr=1.3&pid=1.7" alt="Blog Post 3" class="img-fluid rounded" style="max-width: 200px;" />
-            <div class="ms-3">
-              <h5 class="fw-bold">How Custom Shoes Can Reflect Company Values</h5>
-              <p class="text-muted">We're proud to announce a bold direction in footwear that goes beyond simple style. When it comes to expressing who we are, custom shoes speak volumes. They help us show the world the things our co...</p>
-              <NuxtLink to="/blog/company-values-shoes" class="text-sneaker-orange">Read More</NuxtLink>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="blog-card d-flex">
-            <img src="https://th.bing.com/th/id/OIP.EL5hPJ7k0B7W_D7EbZoexgHaEd?w=363&h=182&c=7&r=0&o=5&dpr=1.3&pid=1.7" alt="Blog Post 4" class="img-fluid rounded" style="max-width: 200px;" />
-            <div class="ms-3">
-              <h5 class="fw-bold">The Rise of Sustainable Custom Shoes in 2025</h5>
-              <p class="text-muted">Explore how eco-friendly materials and sustainable manufacturing are shaping the custom shoe industry. Highlight companies leading the charge and how businesses can align their brand with sustainability trends...</p>
-              <NuxtLink to="/blog/sustainable-shoes-2025" class="text-sneaker-orange">Read More</NuxtLink>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="blog-card d-flex">
-            <img src="https://th.bing.com/th/id/OIP.EL5hPJ7k0B7W_D7EbZoexgHaEd?w=363&h=182&c=7&r=0&o=5&dpr=1.3&pid=1.7" alt="Blog Post 5" class="img-fluid rounded" style="max-width: 200px;" />
-            <div class="ms-3">
-              <h5 class="fw-bold">Top 10 Companies Revolutionizing Custom Footwear Design</h5>
-              <p class="text-muted">Showcase innovative companies using AI, 3D printing, or unique design techniques to create custom shoes. Include visuals of standout designs and interviews or quotes from industry leaders...</p>
-              <NuxtLink to="/blog/top-companies-2025" class="text-sneaker-orange">Read More</NuxtLink>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="blog-card d-flex">
-            <img src="https://th.bing.com/th/id/OIP.EL5hPJ7k0B7W_D7EbZoexgHaEd?w=363&h=182&c=7&r=0&o=5&dpr=1.3&pid=1.7" alt="Blog Post 6" class="img-fluid rounded" style="max-width: 200px;" />
-            <div class="ms-3">
-              <h5 class="fw-bold">How to Build Brand Loyalty with Custom Shoe Campaigns</h5>
-              <p class="text-muted">Discuss strategies for companies to use custom shoes as a marketing tool to boost customer engagement and loyalty. Include case studies or examples of successful campaigns...</p>
-              <NuxtLink to="/blog/brand-loyalty-campaigns" class="text-sneaker-orange">Read More</NuxtLink>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="blog-card d-flex">
-            <img src="https://th.bing.com/th/id/OIP.EL5hPJ7k0B7W_D7EbZoexgHaEd?w=363&h=182&c=7&r=0&o=5&dpr=1.3&pid=1.7" alt="Blog Post 7" class="img-fluid rounded" style="max-width: 200px;" />
-            <div class="ms-3">
-              <h5 class="fw-bold">The Future of Custom Shoes: Predictions for 2026 and Beyond</h5>
-              <p class="text-muted">Offer a forward-looking perspective on where the custom shoe industry is headed, including advancements in technology, design trends, and consumer preferences...</p>
-              <NuxtLink to="/blog/future-shoes-2026" class="text-sneaker-orange">Read More</NuxtLink>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="text-center mt-4">
-        <NuxtLink to="/blogPage" class="btn btn-sneaker px-5 py-3 fw-bold text-uppercase">
-          View All Blogs
-        </NuxtLink>
       </div>
     </section>
 
@@ -448,6 +386,45 @@ const bestSeller = {
   colors: ['#bdbba7', '#c2b8a3', '#b6b6c7', '#aeb8c6'],
   link: '/productPage/1'
 }
+
+const readmoreArticles = [
+  {
+    id: 1,
+    title: 'Custom Shoes: Company Swag That Gets People Talking',
+    excerpt: 'When it comes to company swag, businesses are always on the lookout for something unique, memorable, and practical. Custom shoes have emerged as a stan...',
+    image: 'https://th.bing.com/th/id/OIP.EL5hPJ7k0B7W_D7EbZoexgHaEd?w=363&h=182&c=7&r=0&o=5&dpr=1.3&pid=1.7'
+  },
+  {
+    id: 2,
+    title: 'Best Company Branded Shoes in 2025',
+    excerpt: 'As we step into 2025, branded shoes continue to dominate the market with their innovation, style, and functionality. The footwear industry has expanded its offerings, introducing products that cate...',
+    image: 'https://th.bing.com/th/id/OIP.EL5hPJ7k0B7W_D7EbZoexgHaEd?w=363&h=182&c=7&r=0&o=5&dpr=1.3&pid=1.7'
+  },
+  {
+    id: 3,
+    title: 'How Custom Shoes Can Reflect Company Values',
+    excerpt: 'We\'re proud to announce a bold direction in footwear that goes beyond simple style. When it comes to expressing who we are, custom shoes speak volumes. They help us show the world the things our co...',
+    image: 'https://th.bing.com/th/id/OIP.EL5hPJ7k0B7W_D7EbZoexgHaEd?w=363&h=182&c=7&r=0&o=5&dpr=1.3&pid=1.7'
+  },
+  {
+    id: 4,
+    title: 'The Rise of Sustainable Custom Shoes in 2025',
+    excerpt: 'Explore how eco-friendly materials and sustainable manufacturing are shaping the custom shoe industry. Highlight companies leading the charge and how businesses can align their brand with sustainability trends...',
+    image: 'https://th.bing.com/th/id/OIP.EL5hPJ7k0B7W_D7EbZoexgHaEd?w=363&h=182&c=7&r=0&o=5&dpr=1.3&pid=1.7'
+  },
+  {
+    id: 5,
+    title: 'Top 10 Companies Revolutionizing Custom Footwear Design',
+    excerpt: 'Showcase innovative companies using AI, 3D printing, or unique design techniques to create custom shoes. Include visuals of standout designs and interviews or quotes from industry leaders...',
+    image: 'https://th.bing.com/th/id/OIP.EL5hPJ7k0B7W_D7EbZoexgHaEd?w=363&h=182&c=7&r=0&o=5&dpr=1.3&pid=1.7'
+  },
+  {
+    id: 6,
+    title: 'How to Build Brand Loyalty with Custom Shoe Campaigns',
+    excerpt: 'Discuss strategies for companies to use custom shoes as a marketing tool to boost customer engagement and loyalty. Include case studies or examples of successful campaigns...',
+    image: 'https://th.bing.com/th/id/OIP.EL5hPJ7k0B7W_D7EbZoexgHaEd?w=363&h=182&c=7&r=0&o=5&dpr=1.3&pid=1.7'
+  }
+]
 </script>
 
 <style scoped>
@@ -598,8 +575,8 @@ const bestSeller = {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   }
 
-  /* Blog Cards */
-  .blog-card {
+  /* Readmore Cards */
+  .readmore-card {
     background: #fff;
     border-radius: 12px;
     padding: 15px;
@@ -607,17 +584,17 @@ const bestSeller = {
     transition: all 0.3s ease;
   }
 
-  .blog-card:hover {
+  .readmore-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   }
 
-  .blog-card img {
+  .readmore-card img {
     border-radius: 8px;
     transition: transform 0.3s ease;
   }
 
-  .blog-card:hover img {
+  .readmore-card:hover img {
     transform: scale(1.03);
   }
 
