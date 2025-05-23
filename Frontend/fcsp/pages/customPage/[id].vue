@@ -600,14 +600,34 @@ onMounted(async () => {
           customProductName.value = editingDesign.name
           basePrice.value = editingDesign.price
           surcharge.value = editingDesign.surcharge
-          // Gán đúng đường dẫn file 3D
-          model3DUrl.value = editingDesign.templateUrl || editingDesign.model3DUrl || '';
-          // ... các logic khác ...
-          initThree();
-          // ... giữ lại logic khôi phục designData ...
+          // Gán lại model3DUrl
+          model3DUrl.value = editingDesign.model3DUrl || editingDesign.modelPath || '/Adidasrunningshoes.glb'
+          // Khôi phục các tuỳ chỉnh
           if (editingDesign.designData) {
-            // ... giữ nguyên logic cũ ...
+            // Khôi phục màu cho từng part
+            if (editingDesign.designData.colors) {
+              Object.entries(editingDesign.designData.colors).forEach(([part, color]) => {
+                if (partColors[part] !== undefined) partColors[part] = color;
+              });
+            }
+            // Khôi phục customText
+            if (editingDesign.designData.customText) {
+              customText.value = editingDesign.designData.customText;
+            }
+            // Khôi phục các tham số textureParams nếu có
+            if (editingDesign.designData.textureParams) {
+              Object.assign(textureParams, editingDesign.designData.textureParams);
+            }
+            // TODO: Nếu muốn khôi phục texture ảnh/text, cần bổ sung logic load lại ảnh vào partTextures hoặc customTextures
           }
+          // Khôi phục previewImages cho captureAngles nếu có
+          if (editingDesign.previewImages && editingDesign.previewImages.length) {
+            editingDesign.previewImages.forEach((img, idx) => {
+              if (captureAngles[idx]) captureAngles[idx].preview = img;
+            });
+          }
+          // Khởi tạo lại mô hình 3D với tuỳ chỉnh
+          initThree();
         }
       } catch (e) {
         console.error('Lỗi khi nạp lại thiết kế đang chỉnh sửa:', e)
@@ -1284,94 +1304,99 @@ const addToCart = async () => {
   }
 }
 
-const saveAsDraft = () => {
+const saveAsDraft = async () => {
   showCompleteModal.value = false
   calculateSurcharge()
-  
-  const productData = {
-    id: Date.now(),
-    name: customProductName.value || 'Custom Running Shoes (Nháp)',
-    templateId: route.params.id,
-    manufacturerId: 1,
-    price: basePrice.value,
-    surcharge: surcharge.value,
-    size: selectedSize.value,
-    image: captureAngles[1].preview,
-    TextureIds: "1",
-    ServiceIds: [], 
-    designData: {
-      colors: {},
-      textures: {},
-      imagesData: {},
-      customText: customText.value,
-      textureParams: { ...textureParams },
-      timestamp: new Date().toISOString(),
-      manufacturerId: 1
-    },
-    previewImages: captureAngles.map(angle => angle.preview)
-  }
-  
-  for (const comp of components) {
-    const partName = comp.value
-    const partsToSave = partGroups[partName] || [partName]
-    partsToSave.forEach((subPart) => {
-      if (materials[subPart]) {
-        const hexColor = '#' + materials[subPart].color.getHexString()
-        productData.designData.colors[subPart] = hexColor
-        // Nếu part đã đổi màu (khác #ffffff)
-        if (hexColor.toLowerCase() !== '#ffffff') {
-          const colorService = apiSurcharges.value.find(
-            s => s.component === partName.toLowerCase() && s.type === 'colorapplication'
-          )
-          if (colorService) {
-            productData.ServiceIds.push(colorService.id)
-          }
-        }
-        if (customTextures[subPart]) {
-          const textureType = customTextures[subPart].texture instanceof THREE.CanvasTexture ? 'text' : 'image'
-          productData.designData.textures[subPart] = {
-            type: textureType,
-            textContent: customText.value
-          }
-          if (textureType === 'image' && customTextures[subPart].imageData) {
-            productData.designData.imagesData[subPart] = customTextures[subPart].imageData
-            // Nếu part đã áp dụng hình ảnh
-            const imageService = apiSurcharges.value.find(
-              s => s.component === partName.toLowerCase() && s.type === 'imageapplication'
+  try {
+    if (!route.params.id) throw new Error('Không tìm thấy ID template')
+
+    // Chuyển previewImages sang file
+    const previewFiles = captureAngles.map((angle, idx) =>
+      angle.preview ? dataURLtoFile(angle.preview, `preview_${idx}.png`) : null
+    ).filter(Boolean)
+
+    const productData = {
+      id: Date.now(),
+      name: customProductName.value || 'Custom Running Shoes (Nháp)',
+      templateId: parseInt(route.params.id),
+      manufacturerId: selectedManufacturer.value || 1,
+      price: basePrice.value || 0,
+      surcharge: surcharge.value || 0,
+      size: selectedSize.value,
+      image: previewFiles[1] || previewFiles[0] || '',
+      description: description.value || 'Thiết kế lưu nháp',
+      TextureIds: ["1"],
+      ServiceIds: [],
+      model3DUrl: model3DUrl.value, // Bổ sung dòng này
+      designData: {
+        colors: {},
+        textures: {},
+        imagesData: {},
+        customText: customText.value,
+        textureParams: { ...textureParams },
+        timestamp: new Date().toISOString(),
+        manufacturerId: selectedManufacturer.value || 1
+      },
+      previewImages: captureAngles.map(angle => angle.preview).filter(Boolean)
+    }
+    
+    // Thu thập thông tin màu sắc và texture
+    for (const comp of components) {
+      const partName = comp.value
+      const partsToSave = partGroups[partName] || [partName]
+      partsToSave.forEach((subPart) => {
+        if (materials[subPart]) {
+          const hexColor = '#' + materials[subPart].color.getHexString()
+          productData.designData.colors[subPart] = hexColor
+          
+          // Kiểm tra và thêm service cho màu sắc
+          if (hexColor.toLowerCase() !== '#ffffff') {
+            const colorService = apiSurcharges.value.find(
+              s => s.component === partName.toLowerCase() && s.type === 'colorapplication'
             )
-            if (imageService) {
-              productData.ServiceIds.push(imageService.id)
+            if (colorService) {
+              productData.ServiceIds.push(colorService.id)
+            }
+          }
+
+          // Kiểm tra và thêm service cho texture
+          if (customTextures[subPart]) {
+            const textureType = customTextures[subPart].texture instanceof THREE.CanvasTexture ? 'text' : 'image'
+            productData.designData.textures[subPart] = {
+              type: textureType,
+              textContent: customText.value
+            }
+            
+            if (textureType === 'image' && customTextures[subPart].imageData) {
+              productData.designData.imagesData[subPart] = customTextures[subPart].imageData
+              const imageService = apiSurcharges.value.find(
+                s => s.component === partName.toLowerCase() && s.type === 'imageapplication'
+              )
+              if (imageService) {
+                productData.ServiceIds.push(imageService.id)
+              }
             }
           }
         }
-      }
-    })
+      })
+    }
+
+    // Loại bỏ trùng lặp trong ServiceIds
+    productData.ServiceIds = Array.from(new Set(productData.ServiceIds))
+
+    // Chèn log kiểm tra dữ liệu gửi lên API và UserId
+    console.log('UserId:', localStorage.getItem('userId'));
+    console.log('DATA GỬI LÊN:', productData);
+    // Gọi API
+    const response = await CustomShoeDesign(productData)
+    console.log('Lưu nháp thành công:', response)
+    alert('Đã lưu nháp thành công!')
+    window.location.href = `/mycustomPage?id=${productData.id}`
+    // hoặc dùng router nếu có: router.push({ path: '/mycustomPage', query: { id: productData.id } })
+  } catch (error) {
+    console.error('Lỗi khi lưu nháp:', error)
+    alert(`Có lỗi xảy ra khi lưu nháp: ${error.message || 'Vui lòng thử lại'}`)
   }
-  // Loại bỏ trùng lặp trong ServiceIds
-  productData.ServiceIds = Array.from(new Set(productData.ServiceIds));
-
-  // Gửi dữ liệu dưới dạng JSON
-  const designDataObj = {
-    colors: productData.designData.colors,
-    textures: productData.designData.textures,
-    imagesData: productData.designData.imagesData,
-    customText: productData.designData.customText,
-    textureParams: productData.designData.textureParams,
-    timestamp: productData.designData.timestamp,
-    manufacturerId: productData.designData.manufacturerId
-  };
-  const jsonString = JSON.stringify(designDataObj);
-  // const designDataFile = new File([jsonString], "designData.json", { type: "application/json" });
-
-  CustomShoeDesign(productData)
-    .then(response => {
-      console.log('Lưu nháp thành công:', response)
-      alert('Đã lưu nháp thành công!')
-    })
-    .catch(error => {
-      console.error('Lỗi khi lưu nháp:', error)
-      alert('Có lỗi xảy ra khi lưu nháp. Vui lòng thử lại.')
-    })
 }
 
 // Updated Three.js initialization
@@ -1928,16 +1953,60 @@ const handleConfirmSwitchTab = () => {
 }
 
 const dataURLtoFile = (dataurl, filename) => {
-  const arr = dataurl.split(',')
-  const mime = arr[0].match(/:(.*?);/)[1]
-  const bstr = atob(arr[1])
-  let n = bstr.length
-  const u8arr = new Uint8Array(n)
-  while(n--){
-    u8arr[n] = bstr.charCodeAt(n)
-  }
-  return new File([u8arr], filename, {type:mime})
+  const arr = dataurl.split(',');
+  const mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while(n--) u8arr[n] = bstr.charCodeAt(n);
+  return new File([u8arr], filename, {type:mime});
 }
+
+onMounted(() => {
+  localStorage.setItem('userId', '1');
+  console.log('model3DUrl.value khi mounted:', model3DUrl.value);
+});
+
+const editDesign = async (item) => {
+  try {
+    // Gọi API lấy chi tiết custom để lấy toàn bộ dữ liệu mới nhất
+    const detail = await getMyCustomById(item.id);
+    if (detail && detail.data) {
+      let model3DUrl = detail.data.model3DUrl || detail.data.modelPath || item.model3DUrl || item.modelPath;
+      // Nếu vẫn chưa có, thử lấy từ templateId
+      if ((!model3DUrl || model3DUrl === '') && detail.data.templateId) {
+        const template = await getTemplateById(detail.data.templateId);
+        if (template && template.model3DUrl) {
+          model3DUrl = template.model3DUrl;
+        }
+      }
+      // KHÔNG fallback về '/Adidasrunningshoes.glb' nữa!
+      const editingItem = {
+        ...detail.data,
+        model3DUrl: model3DUrl, // Chỉ lấy từ API hoặc template, nếu không có thì để rỗng
+        previewImages: detail.data.previewImages || item.previewImages || [],
+      };
+      // Nếu designData là đường dẫn file json, fetch về object
+      if (typeof editingItem.designData === 'string') {
+        try {
+          const response = await fetch(editingItem.designData);
+          if (response.ok) {
+            editingItem.designData = await response.json();
+          }
+        } catch (e) {
+          console.error('Không thể tải lại file json model 3D:', e);
+        }
+      }
+      localStorage.setItem('editingDesign', JSON.stringify(editingItem));
+      window.location.href = `/customPage/${item.id}?edit=true`;
+    } else {
+      alert('Không thể lấy dữ liệu chi tiết thiết kế!');
+    }
+  } catch (e) {
+    alert('Không thể lấy dữ liệu chi tiết thiết kế!');
+    console.error(e);
+  }
+};
 </script>
 <style scoped>
 .custom-detail-page {

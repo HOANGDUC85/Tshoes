@@ -558,6 +558,8 @@ onMounted(async () => {
       }
     }
   }
+
+  console.log('model3DUrl khi lưu nháp:', model3DUrl.value);
 });
 
 const manufacturers = ref([
